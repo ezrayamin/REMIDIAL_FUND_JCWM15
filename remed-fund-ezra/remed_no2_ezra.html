@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nomor 2</title>
+</head>
+
+<body>
+    <h1>Form Product</h1>
+    <form>
+        <input type="text" id="name" placeholder="Product Name">
+        <input type="text" id="price" placeholder="Product Price">
+        <br>
+        <br>
+        <label>Category: </label>
+        <input type="radio" name="category" id="food" value="Food">Food
+        <input type="radio" name="category" id="drink" value="Drink">Drink
+        <input type="radio" name="category" id="others" value="Others">Others
+        <br>
+        <br>
+        <button onclick="Add(event)">ADD</button>
+    </form>
+    <br>
+    <br>
+    <table id="tabelProduk">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="tbodyProduk"></tbody>
+    </table>
+</body>
+<script>
+    let isiTabel = [
+        {
+            id: 1,
+            dataName: "Apple",
+            dataPrice: 5000,
+            dataCategory: "Food"
+        },
+        {
+            id: 2,
+            dataName: "Milk",
+            dataPrice: 7000,
+            dataCategory: "Drink"
+        },
+        {
+            id: 3,
+            dataName: "Tissue",
+            dataPrice: 2000,
+            dataCategory: "Others"
+        }
+    ]
+
+    class NewTabel {
+        constructor(id, dataName, dataPrice, dataCategory) {
+            this.id = id,
+                this.dataName = dataName,
+                this.dataPrice = dataPrice,
+                this.dataCategory = dataCategory
+        }
+    }
+
+    // A 
+    function Show (idx) {
+        console.log("parameter", idx)
+        let table = document.getElementById("tabelProduk")
+        console.log(table)
+
+        let tbody = table.getElementsByTagName("tbody")[0]
+        console.log(tbody)
+
+        let tr = ""
+        for (let i = 0; i < isiTabel.length; i++) {
+            if (idx === i) {
+                tr += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>
+                        <input id="editName" type="text" value="${isiTabel[i].dataName}">
+                    </td>
+                    <td>
+                        <input id="editPrice" type="number" value="${isiTabel[i].dataPrice}">
+                    </td>
+                    <td class="editCat">
+                        <input type="radio" name="category" id ="editFood" value="Food">Food
+                        <input type="radio" name="category" id="editDrink" value="Drink">Drink
+                        <input type="radio" name="category" id="editOthers" value="Others">Others
+                    </td>
+                    <td>
+                        <button onclick="Save(${i})">SAVE</button>
+                        <button onclick="Show()">CANCEL</button>
+                    </td>
+                </tr>
+            `
+            } else {
+                tr += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${isiTabel[i].dataName}</td>
+                    <td>${isiTabel[i].dataPrice}</td>
+                    <td>${isiTabel[i].dataCategory}</td>
+                    <td>
+                        <button onclick="Delete(${i})">DELETE</button>
+                        <button onclick="Edit(${i})">EDIT</button>
+                    </td>
+                </tr>
+            `
+            }
+        }
+        tbody.innerHTML = tr
+    }
+    Show() 
+
+    // add new data
+    function Add (event) {
+        event.preventDefault()
+        console.log("add clicked")
+
+        let form = document.forms[0]
+        console.log(form)
+
+        let inputName = form["name"].value
+        let inputPrice = form["price"].value
+        
+        console.log(form["food"].value)
+        console.log(form["drink"].value)
+        console.log(form["others"].value)
+        let inputCategory
+        if (form["food"].checked) {
+            inputCategory = form["food"].value
+        } else if (form["drink"].checked) {
+            inputCategory = form["drink"].value
+        } else if (form["others"].checked) {
+            inputCategory = form["others"].value
+        } else {
+            alert("please select one category")
+        }
+        console.log("cate", inputCategory)
+
+        if (inputName === "" || inputPrice === "" || inputCategory === "") {
+            alert ("input box could not be empty")
+        } else {
+            isiTabel.push(new NewTabel(
+                isiTabel.length+1,
+                form["name"].value,
+                parseInt(form["price"].value),
+                inputCategory
+            ))
+            console.log(isiTabel)
+            Show()
+
+            form["name"].value = ""
+            form["price"].value = ""
+        }
+    }
+
+    // delete
+    function Delete (para) {
+        console.log(`delete ${para} clicked`)
+        isiTabel.splice(para, 1)
+        Show()
+    }
+
+    // start editing
+    function Edit (para) {
+        console.log(`edit ${para} clicked`)
+        Show(para)
+    }
+    // save editing
+    function Save (para) {
+        // let form = document.getElementsByClassName("editCat")
+        // console.log(form)
+
+        let editNameValue = document.getElementById("editName").value
+        let editPriceValue = document.getElementById("editPrice").value
+        let editCategoryValue 
+        if (document.getElementById("editFood").checked) {
+            editCategoryValue = document.getElementById("editFood").value
+        } else if (document.getElementById("editDrink").checked) {
+            editCategoryValue = document.getElementById("editDrink").value
+        } else if (document.getElementById("editOthers").checked) {
+            editCategoryValue = document.getElementById("editOthers").value
+        } else {
+            alert("please select one category")
+        }
+        console.log("cate edit", editCategoryValue)
+
+        isiTabel[para] = {dataName : editNameValue, dataPrice: editPriceValue, dataCategory: editCategoryValue}
+        Show()
+    }
+</script>
+
+</html>

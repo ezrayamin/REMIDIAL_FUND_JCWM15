@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nomor 1</title>
+</head>
+<body>
+    <h1>Masukkan Kata</h1>
+    <form>
+        <input type="text" id="kata" placeholder="Masukan sebuah kata">
+    </form>
+    <br>
+    <button onclick="Hitung()">HITUNG HURUF VOKAL</button>
+    <button onclick="Vokal()">HURUF VOKAL</button>
+    <button onclick="Tanpa()">TANPA VOKAL</button>
+    <br>
+    <h1>Hasil:</h1>
+    <h1 id="hasil"></h1>
+</body>
+<script>
+let input= document.getElementById("kata")
+let hasil = document.getElementById("hasil")
+
+Hitung = () => {
+    let value = input.value
+    let valuePisah = value.split('')
+    let inputPisahSendiri = valuePisah.filter(function(item, index){
+        return valuePisah.indexOf(item) >= index;
+    })
+    let hitung = 0
+    for(let i = 0; i < inputPisahSendiri.length; i++) {
+        if(inputPisahSendiri[i] == "a" || inputPisahSendiri[i] == "i" || inputPisahSendiri[i] == "u" || inputPisahSendiri[i] == "e" || inputPisahSendiri[i] == "o") {
+            hitung++
+        }
+    }
+    hasil.innerHTML = "ada " + hitung + " huruf vokal"
+}
+Vokal = () => {
+    console.log("vokal clicked")
+    let inpvalue = input.value
+    let array = [inpvalue]
+    string = array.map(i=>i.replace( /[qwrtypsdfghjklzxcvbnm]/g, ''))
+    let vokal = string.toString('')
+    hasil.innerHTML = "Huruf vokal: " + vokal
+}
+Tanpa = () => {
+    console.log("tanpa clicked")
+    let inpvalue = input.value
+    let array = [inpvalue]
+    string = array.map(i=>i.replace( /[aiueo]/g, ''))
+    let tanpa = string.toString('')
+    hasil.innerHTML = "Tanpa vokal: " + tanpa
+}
+</script>
+</html>
